@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>kleemcare</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="vv.css">
+  <link rel="stylesheet" type="text/css" href="ourteam.css">
+  <link rel="stylesheet" type="text/css" href="footer.css">
+  <link rel="stylesheet" type="text/css" href="review.css">
+  <link rel="stylesheet" type="text/css" href="ser.css">
+<style>
+   /*loader*/
+  .no-js #loader { display: none;  }
+  .js #loader { display: block; position: absolute; left: 100px; top: 0; }
+  .se-pre-con {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: url(https://smallenvelop.com/wp-content/uploads/2014/08/Preloader_11.gif) center no-repeat #fff;
+  }
+</style>
+
+</head>
+
+<body>
+
+<!-- loading -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>
+  <div class="se-pre-con"></div>
+  <script>
+  $(window).load(function() {
+      // Animate loader off screen
+      $(".se-pre-con").fadeOut("slow");;
+    });
+  </script>
+<!-- load-end -->
+
+<!-- bubble -->
+<style>
+  .bubble-wrap {
+   position: fixed;
+   bottom: -13em;
+   padding: 3em;
+}
+
+.bubble {
+   border-radius: 5em;
+   box-shadow: 1px 1px 7px hsla(0, 0, 80%, 0.7);
+   height: 2em;
+   width: 2em;
+   cursor: pointer;
+
+}
+
+.bubble.hidden {
+   visibility: 0;
+}
+
+.explosion {
+   color: red;
+   position: fixed;
+   transform-origin: center;
+   font-family: sans-serif;
+   font-weight: 700;
+   font-size: 20pt;
+}
+
+.bubble-modal-bg {
+   background-color: #000;
+   opacity: .65;
+   position: fixed;
+   z-index: 1;
+   width: 100%;
+   height: 100vh;
+   top: 0;
+   left: 0;
+   
+}
+.bubble-modal {
+   visibility: hidden;
+   z-index: 2;
+   position: relative;
+   width: 90vw;
+   margin: 0 auto;
+}
+
+.bubble-modal.active {
+   visibility: visible;
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/web-animations/2.2.2/web-animations.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/just-animate/1.1.0/just-animate-all.min.js"></script>
+
+
+
+<div class="bubble-modal">
+   <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="bubbleModalTitle">
+           Title goes here
+         </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        lorem
+      </div>
+
+      </div>
+    </div>
+<script>
+  const $pause = false;
+// this drives the number of bubbles occurring
+const bubbleImages = [
+   'flower.jpg',
+   'flower.jpg',
+   'flower.jpg',
+   'flower.jpg',
+   'flower.jpg',
+   'flower.jpg',
+   'flower.jpg',
+   'flower.jpg'
+];
+
+// x, y cordinates could be proven useful for animating the modal from this location
+function animateBubbleModal(x, y, bubble) {
+   
+   const $modal = document.getElementById('bubble-modal');
+   $modal.classList.add('active');
+   
+   // modal background
+   const $modalbg = document.createElement('div');
+   $modalbg.classList.add('bubble-modal-bg');
+   document.body.appendChild($modalbg);
+}
+
+function createBubble(imageIndex) {
+   // create bubble graphic
+   const $bubble = document.createElement('div');
+   
+   // add class and background image
+   $bubble.classList.add('bubble');
+   $bubble.style.backgroundImage = 'url(' + bubbleImages[imageIndex] + ')';
+   
+   // wrap in a larger div so bubbles are easy to pop while moving
+   const $boundingBox = document.createElement('div');
+   $boundingBox.classList.add('bubble-wrap');
+   
+   // start at 10vw and max of 90vw
+   $boundingBox.style.left = (10 + (Math.random() * 80))  + 'vw';
+
+   // add bubble to bounding box and event listener
+   $boundingBox.appendChild($bubble);
+   $boundingBox.addEventListener('click', destroyBubble($boundingBox));
+   
+   // attach to doc and return
+   document.body.appendChild($boundingBox);
+   return $boundingBox;
+}
+
+function createExplosion(x, y) {
+    // create explosion at the coordinates
+    const $explosion = document.createElement('div');
+    $explosion.classList.add('explosion');
+    
+    // set the cordinates of the "explosion" useful for generating location for graphic
+    $explosion.style.left = x + 'px';
+    $explosion.style.top = y + 'px';
+   
+    // set text - again could put anything in here like the start of an animation 
+    $explosion.innerHTML = "KleemCare";
+    
+    // add element to dom
+    document.body.appendChild($explosion);
+   
+    // animate cartoon pop on words
+    just.animate({
+       targets: $explosion,
+       to: 600,
+       fill: 'forwards',
+       easing: 'ease-out',
+       css: [
+          { scale: 1 },
+          { offset: 0.2, scale: 1.4, opacity: 1 },
+          { scale: .7, opacity: 0 }
+       ]
+    })
+    .on('finish', () => document.body.removeChild($explosion));
+}
+
+function destroyBubble($bubble) {
+   return () => {
+      // get the bubble bounding box and location
+      const rect = $bubble.getBoundingClientRect();
+      const centerX = (rect.right - rect.left) * .45 + rect.left;
+      const centerY = (rect.bottom - rect.top) * .45 + rect.top;
+      
+      // add animation for deleting bubble
+      createExplosion(centerX, centerY);
+      
+      // create modal here
+      //animateBubbleModal(centerX, centerY, $bubble);
+
+      // remove bubble
+      $bubble.style.display = 'none';
+   }
+}
+
+function generateBubbles(length) {
+   const targets = []
+   for (let i = 0; i < length; i++) {
+      targets.push(createBubble(i));
+   }
+   return targets;
+}
+
+function animateBubbles() {
+   const bubbles = generateBubbles(bubbleImages.length);
+   const player = just.animate({
+      targets: bubbles,
+      to: '5s',
+      easing: 'ease-in',
+      css: {
+         transform() {
+            const endTranslateY = just.random(100, 110, 'vh', true);
+            const startScale = just.random(80, 100, null, true);
+            const endScale = just.random(40, 80, null, true);
+            
+            return [
+               'translateY(0) scale(0.' + startScale + ')', 
+               'translatey(-' + endTranslateY + ') scale(0.' + endScale + ')'
+            ];
+         }
+      },
+      delay() {
+         return just.random(0, 10000);
+      }
+   })
+   .on('finish', () => {
+      bubbles.forEach(bubble => {
+         document.body.removeChild(bubble);
+      });
+   });
+   
+   return player;
+}
+
+function startBubbles() {
+   animateBubbles().on('finish', startBubbles);
+}
+
+
+
+startBubbles();
+
+</script>
+</div>
+<!-- bubble end -->
+
+
+
+<!-- services -->
+
+<center ><h4>Patients who are suffering from any of the following problems/conditions<br>are treated here with personal attention and<br> best satisfaction</h4><br> 
+</center>
+<br>
+
+<div class="container" style="background-color: #056674">
+    <div class="card-deck">
+        <div class="card mb-5">
+            <img class="card-img-top img-fluid" src="o1.png" alt="Card image cap">
+            <div class="card-body text-center">
+                <h4 class="card-title">ORTHOPADEDIC CONDITIONS</h4>
+                <p class="card-text" style="font-size: 13px;">Neck pain, Cervical spondylitis, Vertigo, Rotator Cuff Injuries, Forzen Shoulder (Adhesive Causalities) , Rheumatoid Arthritis, Shoulder Impingement Syndrome, Tennis elbow, Knee Arthritis, Meniscus Tears,Degenerative Disc Disease, Herniated Disc, Back pain Kyphosis, Lumbar Radiculopathy (Sciatica), Scoliosis, Post fracture stiffness, All kind of Chronic joint pain,RSI Exercise for posy-cardic surgical patients.</p>
+                            </div>
+        </div>
+        <div class="card mb-5">
+            <img class="card-img-top img-fluid" src="o2.png" alt="Card image cap">
+            <div class="card-body text-center">
+                <h4 class="card-title">NEUROLOGICAL CONDITIONS</h4>
+                <p class="card-text" style="font-size: 13px;">Stroke, Head injury, Parkinsonism, Spinal cord injury, Bells palsy, Brachial plexus injury, Carpal tunnel syndrome, Diabetic neuropathy, Alcoholic neuropathies, Foot drop, Wrist, drop, Guillian barre syndrome, Motor neuron disease, Multiple sclerosis, Muscular dystrophy, Post polio syndrome, Spsticity.</p>
+                
+            </div>
+        </div>
+        <div class="w-100 d-none d-sm-block d-md-none"><!-- wrap every 2 on sm--></div>
+        <div class="card mb-5">
+            <img class="card-img-top img-fluid" src="o3.png" alt="Card image cap">
+            <div class="card-body text-center">
+                <h4 class="card-title">GYNECOLOGICAL & OBSTRETICALCONDITIONS</h4>
+                <p class="card-text" style="font-size: 13px;">antenatal & Postnatal exercises, Stress Incontinence, Urinary incontinence, Weight loss program, Urgency, Diastesis rectesis.
+                </p>
+               
+            </div>
+        </div>
+        
+        
+        <div class="w-100 d-none d-xl-block"><!-- wrap every 5 on xl--></div>
+        <div class="card mb-5">
+            <img class="card-img-top img-fluid" src="Group 11.png" alt="Card image cap">
+            <div class="card-body text-center">
+                <h4 class="card-title">SPORTS INJURIES</h4>
+                <p class="card-text" style="font-size: 13px;">Patellar Tendonitis (jumpers Knee), sprains, twisted ankle, pulled muscle, muscle cramp, shoulder instability, Patellofemoral Pain Syndrome (Runners Knee).</p>
+                
+            </div>
+        </div>
+        <div class="w-100 d-none d-sm-block d-md-none"><!-- wrap every 2 on sm--></div>
+        <div class="w-100 d-none d-md-block d-lg-none"><!-- wrap every 3 on md--></div>
+        <div class="card mb-5">
+            <img class="card-img-top img-fluid" src="Group 11.png" alt="Card image cap">
+            <div class="card-body text-center">
+                <h4 class="card-title">CARDIO-RESPIRATORY PROBLEMS</h4>
+                <p class="card-text" style="font-size: 13px;">Chest physiotheraphy, Deep Vein Thrombosis (DVT), Breathing exercise for Bronchiectasis, Asthma,Chronic Bronchitis etc .</p>
+                
+            </div>
+        </div>
+        <div class="card mb-5">
+           <img class="card-img-top img-fluid" src="o4.png" alt="Card image cap">
+            <div class="card-body text-center">
+                <h4 class="card-title">PEDIATRICS CONDITIONS</h4>
+                <p class="card-text" style="font-size: 13px;">Cerebral palsy, Delayed milestones, Erb's palsy, Foot deformities etc.</p>
+                
+            </div>
+        </div>
+        
+    </div>
+</div>
+<br><br>
+<!-- services-end -->
+
+
+<!-- How we are different -->
+<h3><center>How we are different</center></h3>
+<div class="row" id="r1">
+  <div class="column" id="c1">
+    <div class="card" id="cr1">
+      <h4>NO CLIENT OVERLAP</h4>
+      <p>All appointments are spent with your physiotherapist
+                focusing only on you.  Our goal is to spend more one
+                on one time with our clients providing thorough 
+                assessments, treatments, and education.  No 
+                overlapping of clients during their sessions.
+</p>
+    </div>
+  </div>
+
+  <div class="column" id="c1">
+    <div class="card" id="cr1">
+      <h4>MOBILE ASSESSMENT/TREATMENT</h4>
+      <p>For some individuals, leaving their place of residence 
+                may not be an option.  Our physiotherapist will come 
+                to you if you live within Bangalore.  Assessments and 
+                treatments can be completed in the privacy of your 
+                own home.</p>
+
+    </div>
+  </div>
+  
+  <div class="column" id="c1">
+    <div class="card" id="cr1">
+      <h4>SOFT TISSUE RELEASE/JOINT MOBILIZATION</h4>
+      <p>Active and passive muscle release and joint 
+                mobilizations can assist with increasing range of 
+                motion prior to exercise and can relieve pain and 
+                discomfort in the short term.  Following soft tissue 
+                release or joint mobilization, it is beneficial to 
+                strengthen these increased ranges of motion for long 
+                term results.</p>
+    </div>
+  </div>
+
+    <div class="column" id="c1">
+    <div class="card" id="cr1">
+      <h4>HOME EXERCISE PROGRAMS</h4>
+      <p>TAll clients will be provided with a home exercise 
+                program to empower them to  take  part  in  their 
+                rehabilitation and fitness goals.  The goal is to
+                never stop moving.  Modifications and alternative 
+                exercises will be  provided  so  the  client  can 
+                remain active while working through their recovery.</p>
+
+    </div>
+  </div>
+
+<div class="column" id="c1">
+    <div class="card" id="cr1">
+      <h4> VIRTUAL PHYSIOTHERAPY</h4>
+      <p>The use of web based video conferencing systems to
+                allow you and  your physiotherapist to connect via 
+                video  on  your  computer  or  smart phone via web 
+                camera to  receive  physiotherapy  services  at  a 
+                distance when an  in-person  visit is not possible.</p>
+    </div>
+  </div>
+
+</div>
+<!-- How we are different end -->
+
+<!-- form -->
+<div class="container" id="cont">
+  <form action="/action_page.php">
+    <h3><center><b style="color:#0500FC; text-decoration: underline;">Booking Form</b></center></h3>
+    <div class="row" id="r2">
+      <div class="col-25">
+        <label for="fname">Full Name</label>
+      </div>
+      <div class="col-75">
+        <input type="text" id="fname" name="firstname" placeholder="Your name..">
+      </div>
+    </div>
+    <div class="row" id="r2">
+      <div class="col-25">
+        <label for="pnum">Mobile Number</label>
+      </div>
+      <div class="col-75">
+        <input type="text" id="pnum" name="mnumber" placeholder="Your Mobile number">
+      </div>
+    </div>
+    <div class="row" id="r2">
+      <div class="col-25">
+        <label for="state">Location</label>
+      </div>
+      <div class="col-75">
+        <select id="state" name="state">
+          <option value="australia">Bangalore</option>
+          <option value="canada">Belagavi</option>
+          <option value="usa">Mysuru</option>
+        </select>
+      </div>
+    </div>
+    <div class="row" id="r2">
+      <div class="col-25">
+        <label for="subject">Subject</label>
+      </div>
+      <div class="col-75">
+        <textarea id="subject" name="subject" placeholder="Main reason for consultation (write in 60 words)" style="height:200px"></textarea>
+      </div>
+    </div>
+    <div class="row" id="r2">
+      <input type="submit" value="Submit">
+    </div>
+  </form>
+</div>
+<br><br><br>
+<!-- form-end -->
+
+
+
+<center ><h4>Instruments</h4><br> 
+</center>
+
+<div class="fluid-container" style="background-color: #d6e0f0; margin: 15px;">
+    <div class="card-deck">
+        <div class="card mb-4">
+            <img class="card-img-top img-fluid" src="Group 11.png" alt="Card image cap">
+            <div class="card-body">
+                <h4 class="card-title">Card title</h4>
+                <p class="card-text" style="font-size: 13px;">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                
+            </div>
+        </div>
+        <div class="card mb-4">
+            <img class="card-img-top img-fluid" src="Group 21.png" alt="Card image cap">
+            <div class="card-body">
+                <h4 class="card-title">Card title</h4>
+                <p class="card-text" style="font-size: 13px;">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+               
+            </div>
+        </div>
+        <div class="w-100 d-none d-sm-block d-md-none"><!-- wrap every 2 on sm--></div>
+        <div class="card mb-4">
+            <img class="card-img-top img-fluid" src="Group 35.png" alt="Card image cap">
+            <div class="card-body">
+                <h4 class="card-title">Card title</h4>
+                <p class="card-text" style="font-size: 13px;">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                
+            </div>
+        </div>
+        <div class="w-100 d-none d-md-block d-lg-none"><!-- wrap every 3 on md--></div>
+        <div class="card mb-4">
+            <img class="card-img-top img-fluid" src="Ultrasound.png" alt="Card image cap">
+            <div class="card-body">
+                <h4 class="card-title">Card title</h4>
+                <p class="card-text" style="font-size: 13px;">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                
+            </div>
+        </div>
+        
+    </div>
+</div>
+<br><br>
+<!--insturments-end-->
+
+
+<!-- our team -->
+
+<div class="fluid-container" id="ourteam-cont">
+  <h2 style="color: white"><center>Our Team</center></h2>
+  <div class="row">
+  
+  <!--team-1-->
+  <div class="col-lg-4">
+  <div class="our-team-main">
+  
+  <div class="team-front">
+  <img src="http://placehold.it/110x110/9c27b0/fff?text=Dilip" class="img-fluid" />
+  <h3>Dr.Parth Prashar</h3>
+  <p>Physiotherapist</p>
+  </div>
+  
+  <div class="team-back">
+  <span>
+  Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis 
+  natoque penatibus et magnis dis parturient montes,
+  Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis 
+  natoque.
+  </span>
+  </div>
+  
+  </div>
+  </div>
+  <!--team-1-->
+  
+  <!--team-2-->
+  <div class="col-lg-4">
+  <div class="our-team-main">
+  
+  <div class="team-front">
+  <img src="http://placehold.it/110x110/336699/fff?text=Dilip" class="img-fluid" />
+  <h3>Dr.Parth Prashar</h3>
+  <p>Physiotherapist</p>
+  </div>
+  
+  <div class="team-back">
+  <span>
+  Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis 
+  natoque penatibus et magnis dis parturient montes,
+  Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis 
+  natoque.
+  </span>
+  </div>
+  
+  </div>
+  </div>
+  <!--team-2-->
+  
+  <!--team-3-->
+  <div class="col-lg-4">
+  <div class="our-team-main">
+  
+  <div class="team-front">
+  <img src="http://placehold.it/110x110/607d8b/fff?text=Dilip" class="img-fluid" />
+  <h3>Dr.Parth Prashar</h3>
+  <p>Physiotherapist</p>
+  </div>
+  
+  <div class="team-back">
+  <span>
+  Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis 
+  natoque penatibus et magnis dis parturient montes,
+  Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis 
+  natoque.
+  </span>
+  </div>
+  
+  </div>
+  </div>
+</div>
+</div>
+  <!--team-3-->
+<br>
+<!-- ourteam-end -->
+
+<!-- reviews -->
+<h2 style="color: #2c7873"><center>Reviews</center></h2>
+  <center>
+
+<div id="demo" class="carousel slide" data-ride="carousel">
+
+  <!-- Indicators -->
+  <ul class="carousel-indicators">
+    <li data-target="#demo" data-slide-to="0" class="active"></li>
+    <li data-target="#demo" data-slide-to="1"></li>
+    <li data-target="#demo" data-slide-to="2"></li>
+  </ul>
+  
+  <!-- The slideshow -->
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+    <div class="card-deck" id="cr2">
+    <div class="card bg-light">
+      <div class="chip">
+      <img src="img_avatar.png" width="96" height="96">
+        John Doe
+    </div>
+      <div class="card-body text-center">
+
+          <span class="fa fa-star checked"></span>
+      <span class="fa fa-star checked"></span>
+      <span class="fa fa-star checked"></span>
+      <span class="fa fa-star checked"></span>
+      <span class="fa fa-star checked"></span>
+        <p class="card-text">All appointments are spent with your physiotherapist focusing only on you. Our goal is to spend more one on one time with our clients providing thorough assessments, treatments, and education.</p>
+    
+      </div>
+    </div>
+    <div class="card bg-light">
+            <div class="chip">
+      <img src="img_avatar.png" width="96" height="96">
+        John Doe
+    </div>
+      <div class="card-body text-center">
+
+          <span class="fa fa-star checked"></span>
+      <span class="fa fa-star checked"></span>
+      <span class="fa fa-star checked"></span>
+      <span class="fa fa-star checked"></span>
+      <span class="fa fa-star"></span>
+        <p class="card-text">All appointments are spent with your physiotherapist focusing only on you. Our goal is to spend more one on one time with our clients providing thorough assessments, treatments, and education</p>
+      </div>
+    </div>
+    </div>
+    </div>
+    <div class="carousel-item">
+     <div class="card-deck" id="cr2">
+    <div class="card bg-light">
+            <div class="chip">
+      <img src="img_avatar.png" width="96" height="96">
+        John Doe
+    </div>
+      <div class="card-body text-center">
+
+          <span class="fa fa-star checked"></span>
+      <span class="fa fa-star checked"></span>
+      <span class="fa fa-star checked"></span>
+      <span class="fa fa-star checked"></span>
+      <span class="fa fa-star"></span>
+        <p class="card-text">All appointments are spent with your physiotherapist focusing only on you. Our goal is to spend more one on one time with our clients providing thorough assessments, treatments, and education</p>
+       
+      </div>
+    </div>
+    <div class="card bg-light">
+            <div class="chip">
+      <img src="img_avatar.png" width="96" height="96">
+        John Doe
+    </div>
+      <div class="card-body text-center">
+
+          <span class="fa fa-star checked"></span>
+      <span class="fa fa-star checked"></span>
+      <span class="fa fa-star checked"></span>
+      <span class="fa fa-star"></span>
+      <span class="fa fa-star"></span>
+        <p class="card-text">All appointments are spent with your physiotherapist focusing only on you. Our goal is to spend more one on one time with our clients providing thorough assessments, treatments, and education</p>
+      </div>
+    </div>
+    </div>
+    </div>
+    <div class="carousel-item">
+     <div class="card-deck" id="cr2">
+    <div class="card bg-light">
+            <div class="chip">
+      <img src="img_avatar.png" width="96" height="96">
+        John Doe
+    </div>
+      <div class="card-body text-center">
+
+          <span class="fa fa-star checked"></span>
+      <span class="fa fa-star checked"></span>
+      <span class="fa fa-star checked"></span>
+      <span class="fa fa-star"></span>
+      <span class="fa fa-star"></span>
+        <p class="card-text">All appointments are spent with your physiotherapist focusing only on you. Our goal is to spend more one on one time with our clients providing thorough assessments, treatments, and education</p>
+      
+      </div>
+    </div>
+    <div class="card bg-light">
+            <div class="chip">
+      <img src="img_avatar.png" width="96" height="96">
+        John Doe
+    </div>
+      <div class="card-body text-center">
+
+          <span class="fa fa-star checked"></span>
+      <span class="fa fa-star checked"></span>
+      <span class="fa fa-star checked"></span>
+      <span class="fa fa-star"></span>
+      <span class="fa fa-star"></span>
+        <p class="card-text">All appointments are spent with your physiotherapist focusing only on you. Our goal is to spend more one on one time with our clients providing thorough assessments, treatments, and education</p>
+      </div>
+    </div>
+    </div>
+    </div>
+  </div>
+  
+  <!-- Left and right controls -->
+  <a class="carousel-control-prev" href="#demo" data-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
+  </a>
+  <a class="carousel-control-next" href="#demo" data-slide="next">
+    <span class="carousel-control-next-icon"></span>
+  </a>
+</div>
+</center>
+<br><br><br>
+<!-- review end -->
+
+
+<!-- video -->
+  <div class="fluid-container bg-success">
+    <center>
+      <video id="vide" src="yoga.mp4" controls="0"></video>
+    </center>
+  </div>
+  <br><br><br>
+  <!-- video_end -->
+
+
+<!-- footer -->
+<section id="footer">
+    <div class="container" id="confoot">
+      <div class="row text-center text-xs-center text-sm-left text-md-left">
+        <div class="col-xs-12 col-sm-4 col-md-4">
+          <h5>Quick links</h5>
+          <ul class="list-unstyled quick-links">
+            <li><a href="https://www.fiverr.com/share/qb8D02"><i class="fa fa-angle-double-right"></i>Home</a></li>
+            <li><a href="https://www.fiverr.com/share/qb8D02"><i class="fa fa-angle-double-right"></i>About</a></li>
+            <li><a href="https://www.fiverr.com/share/qb8D02"><i class="fa fa-angle-double-right"></i>FAQ</a></li>
+            <li><a href="https://www.fiverr.com/share/qb8D02"><i class="fa fa-angle-double-right"></i>Get Started</a></li>
+            <li><a href="https://www.fiverr.com/share/qb8D02"><i class="fa fa-angle-double-right"></i>Videos</a></li>
+          </ul>
+        </div>
+        <div class="col-xs-12 col-sm-4 col-md-4">
+          <h5>Quick links</h5>
+          <ul class="list-unstyled quick-links">
+            <li><a href="https://www.fiverr.com/share/qb8D02"><i class="fa fa-angle-double-right"></i>Home</a></li>
+            <li><a href="https://www.fiverr.com/share/qb8D02"><i class="fa fa-angle-double-right"></i>About</a></li>
+            <li><a href="https://www.fiverr.com/share/qb8D02"><i class="fa fa-angle-double-right"></i>FAQ</a></li>
+            <li><a href="https://www.fiverr.com/share/qb8D02"><i class="fa fa-angle-double-right"></i>Get Started</a></li>
+            <li><a href="https://www.fiverr.com/share/qb8D02"><i class="fa fa-angle-double-right"></i>Videos</a></li>
+          </ul>
+        </div>
+        <div class="col-xs-12 col-sm-4 col-md-4">
+          <h5>Quick links</h5>
+          <ul class="list-unstyled quick-links">
+            <li><a href="https://www.fiverr.com/share/qb8D02"><i class="fa fa-angle-double-right"></i>Home</a></li>
+            <li><a href="https://www.fiverr.com/share/qb8D02"><i class="fa fa-angle-double-right"></i>About</a></li>
+            <li><a href="https://www.fiverr.com/share/qb8D02"><i class="fa fa-angle-double-right"></i>FAQ</a></li>
+            <li><a href="https://www.fiverr.com/share/qb8D02"><i class="fa fa-angle-double-right"></i>Get Started</a></li>
+            <li><a href="https://wwwe.sunlimetech.com" title="Design and developed by"><i class="fa fa-angle-double-right"></i>Imprint</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-5">
+          <ul class="list-unstyled list-inline social text-center">
+            <li class="list-inline-item"><a href="https://www.fiverr.com/share/qb8D02"><i class="fa fa-facebook"></i></a></li>
+            <li class="list-inline-item"><a href="https://www.fiverr.com/share/qb8D02"><i class="fa fa-twitter"></i></a></li>
+            <li class="list-inline-item"><a href="https://www.fiverr.com/share/qb8D02"><i class="fa fa-instagram"></i></a></li>
+            <li class="list-inline-item"><a href="https://www.fiverr.com/share/qb8D02"><i class="fa fa-google-plus"></i></a></li>
+            <li class="list-inline-item"><a href="https://www.fiverr.com/share/qb8D02" target="_blank"><i class="fa fa-envelope"></i></a></li>
+          </ul>
+        </div>
+        <hr>
+      </div>  
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-2 text-center text-white">
+          <p>KleemCare</p>
+          <p class="h6">© All right Reversed.<a class="text-green ml-2"target="_blank"></a></p>
+        </div>
+        <hr>
+      </div>  
+    </div>
+  </section>
+
+<!-- footer-end -->
+</body>
+</html>

@@ -1,0 +1,45 @@
+ .carousel-inner {
+    width: 80%;
+    height: 50%;
+  }
+  #cr2 {
+  	height: 60%;
+  }
+
+.chip {
+  width: 200px;
+  display: inline-block;
+  padding: 0 25px;
+  height: 50px;
+  font-size: 16px;
+  line-height: 50px;
+  border-radius: 25px;
+  background-color: #eeecda;
+}
+
+.chip img {
+  float: left;
+  margin: 0 10px 0 -25px;
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+}
+
+  .checked {
+  color: orange;
+}
+
+#vide {
+	margin-bottom: 30px; 
+	margin-top: 30px; 
+	width: 700px;
+	height: 450px;
+}
+@media (max-width:767px) {
+	#vide {
+	margin-bottom: 15px; 
+	margin-top: 15px; 
+	width: 200px;
+	height: 150px;
+}
+}
